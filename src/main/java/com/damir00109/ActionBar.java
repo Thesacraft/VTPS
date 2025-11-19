@@ -11,40 +11,40 @@ public class ActionBar {
     private static final Map<UUID, Boolean> playerActionBarStates = new HashMap<>();
 
     /**
-     * Проверяет, включён ли Action Bar для игрока.
+     * Checks if the Action Bar is enabled for the player.
      */
     public static boolean isActionBarEnabled(ServerPlayerEntity player) {
         return playerActionBarStates.getOrDefault(player.getUuid(), false);
     }
 
     /**
-     * Включает или выключает Action Bar для конкретного игрока.
+     * Toggles the Action Bar for a specific player.
      */
     public static void toggleActionBar(ServerPlayerEntity player) {
         UUID playerId = player.getUuid();
         boolean isEnabled = playerActionBarStates.getOrDefault(playerId, false);
 
         if (isEnabled) {
-            stopActionBarUpdates(player); // Выключаем Action Bar
-            player.sendMessage(Text.of("TPS ActionBar выключен"), false);
+            stopActionBarUpdates(player); // Disable Action Bar
+            player.sendMessage(Text.of("TPS ActionBar disabled"), false);
         } else {
-            startActionBarUpdates(player); // Включаем Action Bar
-            player.sendMessage(Text.of("TPS ActionBar включён"), false);
+            startActionBarUpdates(player); // Enable Action Bar
+            player.sendMessage(Text.of("TPS ActionBar enabled"), false);
         }
 
-        playerActionBarStates.put(playerId, !isEnabled); // Обновляем состояние
+        playerActionBarStates.put(playerId, !isEnabled); // Update state
     }
 
     /**
-     * Запускает обновление Action Bar для игрока.
+     * Starts updating the Action Bar for the player.
      */
     private static void startActionBarUpdates(ServerPlayerEntity player) {
-        // Запускаем поток для обновления Action Bar
+        // Start a thread to update the Action Bar
         new Thread(() -> {
             while (playerActionBarStates.getOrDefault(player.getUuid(), false)) {
-                updateActionBar(player); // Обновляем Action Bar
+                updateActionBar(player); // Update Action Bar
                 try {
-                    Thread.sleep(500); // Задержка 500 мс
+                    Thread.sleep(500); // 500 ms delay
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -53,24 +53,24 @@ public class ActionBar {
     }
 
     /**
-     * Останавливает обновление Action Bar для игрока.
+     * Stops updating the Action Bar for the player.
      */
     private static void stopActionBarUpdates(ServerPlayerEntity player) {
-        // Ничего не нужно делать, поток сам завершится
+        // Nothing needs to be done, the thread will terminate itself
     }
 
     /**
-     * Обновляет текст Action Bar для игрока.
+     * Updates the Action Bar text for the player.
      */
     public static void updateActionBar(ServerPlayerEntity player) {
         double tps = VanillaTPS.getCurrentTPS();
         double mspt = VanillaTPS.getCurrentMSPT();
-        int ping = player.networkHandler.getLatency(); // Пинг игрока
+        int ping = player.networkHandler.getLatency(); // Player's ping
 
-        // Формируем текст для Action Bar
+        // Format the text for the Action Bar
         String message = String.format("TPS: %.2f, MSPT: %.2fms, Ping: %dms", tps, mspt, ping);
 
-        // Отправляем сообщение в Action Bar
+        // Send the message to the Action Bar
         player.sendMessage(Text.of(message), true);
     }
 }

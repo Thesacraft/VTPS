@@ -17,7 +17,7 @@ public class VanillaTPS {
 	public static final String MOD_ID = "vanilla-tps";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-	// Общие поля (теперь public)
+	// General fields (now public)
 	public static long lastTickTime = 0;
 	public static double tps = 20.0;
 	public static double mspt = 50.0;
@@ -31,7 +31,7 @@ public class VanillaTPS {
 	public static final Queue<Double> mspt15m = new ArrayDeque<>(18000);
 
 	/**
-	 * Метод для обработки серверных тиков.
+	 * Method for processing server ticks.
 	 */
 	public static void onServerTick(MinecraftServer server) {
 		long currentTime = System.nanoTime();
@@ -46,7 +46,7 @@ public class VanillaTPS {
 	}
 
 	/**
-	 * Метод для сбора статистики TPS и MSPT.
+	 * Method for collecting TPS and MSPT statistics.
 	 */
 	private static void collectStatistics(double tps, double mspt) {
 		tps5s.add(tps);
@@ -71,21 +71,21 @@ public class VanillaTPS {
 	}
 
 	/**
-	 * Возвращает текущее значение TPS.
+	 * Returns the current TPS value.
 	 */
 	public static double getCurrentTPS() {
 		return tps;
 	}
 
 	/**
-	 * Возвращает текущее значение MSPT.
+	 * Returns the current MSPT value.
 	 */
 	public static double getCurrentMSPT() {
 		return mspt;
 	}
 
 	/**
-	 * Метод для получения информации о CPU.
+	 * Method for getting CPU information.
 	 */
 	public static double getCpuUsage() {
 		com.sun.management.OperatingSystemMXBean osBean = (com.sun.management.OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
@@ -94,7 +94,7 @@ public class VanillaTPS {
 	}
 
 	/**
-	 * Метод для получения информации о RAM в процентах.
+	 * Method for getting RAM information in percentage.
 	 */
 	public static double getRamUsagePercentage() {
 		Runtime runtime = Runtime.getRuntime();
@@ -106,7 +106,7 @@ public class VanillaTPS {
 	}
 
 	/**
-	 * Метод для получения информации о RAM в формате "Использовано: XM / YM (max: ZM)".
+	 * Method for getting RAM information in "Used: XM / YM (max: ZM)" format.
 	 */
 	public static String getRamUsageFormatted() {
 		Runtime runtime = Runtime.getRuntime();
@@ -121,23 +121,23 @@ public class VanillaTPS {
 	}
 
 	/**
-	 * Метод для регистрации команд.
+	 * Method for registering commands.
 	 */
 	public static void registerCommands(CommandDispatcher<ServerCommandSource> dispatcher) {
-		// Команда /tps
+		// /tps command
 		dispatcher.register(
 				literal("tps")
-						.requires(source -> source.hasPermissionLevel(2)) // Требует уровня доступа 2 (оператор)
+						.requires(source -> source.hasPermissionLevel(2)) // Requires permission level 2 (operator)
 						.executes(context -> {
 							context.getSource().sendMessage(Text.of(TPS.getTpsInfo()));
 							return 1;
 						})
 		);
 
-		// Команда /tps-actionbar
+		// /tps-actionbar command
 		dispatcher.register(
 				literal("tps-actionbar")
-						.requires(source -> source.hasPermissionLevel(2)) // Требует уровня доступа 2 (оператор)
+						.requires(source -> source.hasPermissionLevel(2)) // Requires permission level 2 (operator)
 						.executes(context -> {
 							ServerPlayerEntity player = context.getSource().getPlayer();
 							if (player != null) {
@@ -147,10 +147,10 @@ public class VanillaTPS {
 						})
 		);
 
-		// Команда /tabtps
+		// /tabtps command
 		dispatcher.register(
 				literal("tabtps")
-						.requires(source -> source.hasPermissionLevel(2)) // Требует уровня доступа 2 (оператор)
+						.requires(source -> source.hasPermissionLevel(2)) // Requires permission level 2 (operator)
 						.executes(context -> {
 							ServerPlayerEntity player = context.getSource().getPlayer();
 							if (player != null) {
