@@ -1,11 +1,20 @@
 package com.damir00109;
 
+import net.minecraft.screen.Generic3x3ContainerScreenHandler;
+import net.minecraft.screen.CraftingScreenHandler;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.screen.ScreenHandlerContext;
+import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.BlockPos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.awt.*;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayDeque;
 import java.util.Queue;
@@ -150,7 +159,7 @@ public class VanillaTPS {
 		// /tabtps command
 		dispatcher.register(
 				literal("tabtps")
-						.requires(source -> source.hasPermissionLevel(2)) // Requires permission level 2 (operator)
+						.requires(source -> source.hasPermissionLevel(0)) // Requires permission level 2 (operator)
 						.executes(context -> {
 							ServerPlayerEntity player = context.getSource().getPlayer();
 							if (player != null) {

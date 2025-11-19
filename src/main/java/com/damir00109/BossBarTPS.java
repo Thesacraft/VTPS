@@ -6,6 +6,7 @@ import net.minecraft.text.Text;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Queue;
 import java.util.UUID;
 
 public class BossBarTPS {
@@ -48,7 +49,7 @@ public class BossBarTPS {
             while (playerBossBarStates.getOrDefault(player.getUuid(), false)) {
                 updateBossBar(player); // Update Boss Bar
                 try {
-                    Thread.sleep(500); // 500ms delay
+                    Thread.sleep(1000); // 500ms delay
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -74,8 +75,8 @@ public class BossBarTPS {
         ServerBossBar bossBar = playerBossBars.get(player.getUuid());
         if (bossBar == null) return;
 
-        double tps = VanillaTPS.getCurrentTPS();
-        double mspt = VanillaTPS.getCurrentMSPT();
+        double tps = getAverage(VanillaTPS.tps5s);
+        double mspt = getAverage(VanillaTPS.mspt5s);
         int ping = player.networkHandler.getLatency(); // Player's ping
 
         // Format text for Boss Bar
@@ -97,5 +98,13 @@ public class BossBarTPS {
         } else {
             return ServerBossBar.Color.RED; // High load
         }
+    }
+    private static double getAverage(Queue<Double> queue) {
+        if (queue.isEmpty()) return 0;
+        double sum = 0;
+        for (double value : queue) {
+            sum += value;
+        }
+        return sum / queue.size();
     }
 }
